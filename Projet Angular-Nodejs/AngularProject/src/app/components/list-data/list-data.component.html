@@ -1,0 +1,241 @@
+<div>
+  <div class="flex-row d-flex">
+    <!-- data search form -->
+    <form class="row g-3 ms-auto">
+      <div class="col-auto">
+        <input
+          type="text"
+          class="form-control ms-auto"
+          placeholder="Search by Name"
+          name="searchTerm"
+          [(ngModel)]="searchTerm"
+          (keyup)="search($any($event.target).value)"
+        />
+      </div>
+    </form>
+
+    <!-- button to open add data modal -->
+    <button
+      type="button"
+      class="mb-2 ml-auto me-3 btn btn-primary d-block"
+      data-bs-toggle="modal"
+      data-bs-target="#addModalForm"
+    >
+      Add new meeting room
+    </button>
+  </div>
+
+  <table
+    class="table table-striped table-bordered border-success table-responsive"
+  >
+    <thead class="table-success">
+      <tr>
+        <th scope="col" style="width: 10px">ID</th>
+        <th scope="col">Name</th>
+        <th scope="col">Capacity</th>
+        <th scope="col">Equipments</th>
+        <th scope="col">Description</th>
+        <th scope="col" style="width: 10px">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of listData; index as i">
+        <td>{{ data._id }}</td>
+        <td>{{ data.name }}</td>
+        <td>{{ data.capacity }}</td>
+        <td>{{ data.equipments.join(", ") }}</td>
+        <td>{{ data.description }}</td>
+        <td>
+          <button
+            type="button"
+            class="mb-2 ml-auto btn btn-primary d-block"
+            data-bs-toggle="modal"
+            data-bs-target="#editModalForm"
+            (click)="editModal(data)"
+          >
+            Edit
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Add modal form -->
+  <div
+    class="modal fade"
+    id="addModalForm"
+    tabIndex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">
+            Add new meeting room
+          </h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="formValue">
+            <div class="mb-3">
+              <label class="form-label">Name</label>
+              <input
+                type="text"
+                class="form-control"
+                name="name"
+                formControlName="name"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Capacity</label>
+              <input
+                type="number"
+                class="form-control"
+                name="capacity"
+                formControlName="capacity"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Equipments</label>
+              <input
+                type="text"
+                class="form-control"
+                name="equipments"
+                formControlName="equipments"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Description</label>
+              <textarea
+                rows="4"
+                cols="50"
+                class="form-control"
+                name="description"
+                formControlName="description"
+              ></textarea>
+            </div>
+            <div class="modal-footer d-block">
+              <button
+                (click)="postData()"
+                type="button"
+                class="btn btn-info float-end"
+              >
+                Submit
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit modal form -->
+  <div
+    class="modal fade"
+    id="editModalForm"
+    tabIndex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content" *ngIf="editDataModal">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Edit Meeting Room</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="updateFormValue">
+            <div class="mb-3">
+              <label class="form-label">ID</label>
+              <input
+                [(ngModel)]="editDataModal._id"
+                type="text"
+                class="form-control"
+                name="id"
+                formControlName="Id"
+                readonly
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Name</label>
+              <input
+                [(ngModel)]="editDataModal.name"
+                type="text"
+                class="form-control"
+                name="name"
+                formControlName="updateName"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Capacity</label>
+              <input
+                [(ngModel)]="editDataModal.capacity"
+                type="number"
+                class="form-control"
+                name="capacity"
+                formControlName="updateCapacity"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Equipments</label>
+              <input
+                [(ngModel)]="editDataModal.equipments"
+                type="text"
+                class="form-control"
+                name="equipments"
+                formControlName="updateEquipments"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Description</label>
+              <textarea
+                [(ngModel)]="editDataModal.description"
+                rows="4"
+                cols="50"
+                class="form-control"
+                name="description"
+                formControlName="updateDescription"
+              ></textarea>
+            </div>
+            <div class="modal-footer d-block">
+              <button
+                (click)="updateData()"
+                type="button"
+                data-bs-dismiss="modal"
+                class="btn btn-success float-end"
+              >
+                Save
+              </button>
+
+              <button
+                (click)="deleteData(editDataModal)"
+                type="button"
+                data-bs-dismiss="modal"
+                class="btn btn-danger float-start"
+              >
+                Delete
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,32 @@
+/* navbar.component.css */
+nav {
+  background-color: #333; /* Dark background color */
+  color: #fff; /* Text color */
+  padding: 10px 20px; /* Padding for top and bottom, and left and right */
+  margin-bottom: 20px; /* Margin at the bottom */
+}
+
+nav ul {
+  list-style-type: none; /* Remove bullet points from the list */
+  padding: 0; /* Remove default padding */
+  margin: 0; /* Remove default margin */
+}
+
+nav ul li {
+  display: inline; /* Display list items horizontally */
+  margin-right: 10px; /* Spacing between list items */
+}
+
+nav ul li:last-child {
+  margin-right: 0; /* Remove margin from the last list item */
+}
+
+nav ul li a {
+  color: #fff; /* Link text color */
+  text-decoration: none; /* Remove underline from links */
+  padding: 5px 10px; /* Add padding to each link */
+}
+
+nav ul li a:hover {
+  background-color: #555; /* Darker background color on hover */
+}
